@@ -77,6 +77,21 @@
           }
         });
 
+        document.addEventListener('touchstart', (event) => {
+          if (event.changedTouches[0].clientY < event.target.clientHeight / 2) {
+            input.value |= ARROW_UP;
+          } else {
+            input.value |= ARROW_DOWN;
+          }
+        });
+        document.addEventListener('touchend', (event) => {
+          if (event.changedTouches[0].clientY < event.target.clientHeight / 2) {
+            input.value &= ~ARROW_UP;
+          } else {
+            input.value &= ~ARROW_DOWN;
+          }
+        });
+
         const canvasData = new Uint8ClampedArray(instance.exports.memory.buffer, 0, canvas.width * canvas.height * 4);
         const imageData = new ImageData(canvasData, canvas.width, canvas.height);
 
