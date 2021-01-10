@@ -205,6 +205,18 @@
       (i32.const 255))
   )
 
+  (func $start
+    global.get $height
+    i32.const 2
+    i32.div_u
+    global.get $paddle_height
+    i32.const 2
+    i32.div_u
+    i32.sub
+    global.set $player_pos_y
+  )
+  (start $start)
+
   (func (export "draw")
     call $clear
 
