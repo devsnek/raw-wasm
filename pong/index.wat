@@ -153,7 +153,7 @@
             ))
         )
         (else
-          (global.set $ball_pos_x (f32.sub (global.get $fwidth) (f32.const 2)))
+          (global.set $ball_pos_x (f32.sub (global.get $fwidth) (f32.const 3)))
           (global.set $ball_pos_y (f32.convert_i32_u (i32.add (global.get $player_pos_y) (i32.div_u (global.get $paddle_height) (i32.const 2)))))
           (global.set $ball_vel_x (f32.const -1.0))
           (global.set $ball_vel_y (f32.const 0))
@@ -161,7 +161,7 @@
 
     (if (f32.ge
           (global.get $ball_pos_x)
-          (f32.sub (global.get $fwidth) (f32.const 1)))
+          (f32.sub (global.get $fwidth) (f32.const 2)))
       (if (i32.and
             (i32.ge_u (i32.trunc_f32_u (global.get $ball_pos_y)) (global.get $player_pos_y))
             (i32.le_u (i32.trunc_f32_u (global.get $ball_pos_y)) (i32.add (global.get $player_pos_y) (global.get $paddle_height))))
@@ -242,7 +242,7 @@
 
     (call $court)
     (call $ball)
-    (call $paddle (i32.sub (global.get $width) (i32.const 1)) (global.get $player_pos_y))
+    (call $paddle (i32.sub (global.get $width) (i32.const 2)) (global.get $player_pos_y))
     (call $paddle (i32.const 1) (global.get $player_pos_y))
   )
 )
