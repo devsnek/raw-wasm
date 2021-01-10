@@ -86,7 +86,7 @@
     )
 
     (global.set $time (f64.add (global.get $time) (f64.const 0.05)))
-    (if (f64.gt (global.get $time) (f64.const 64))
+    (if (f64.gt (global.get $time) (f64.const 128))
       (global.set $time (f64.const 0))
     )
   )
