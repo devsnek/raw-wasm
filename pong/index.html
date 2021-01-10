@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      html, body {
+        margin: 0;
+        background-color: black;
+      }
+      canvas {
+        width: 90vmin;
+        height: 45vmin;
+        margin: auto;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-crisp-edges;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas width="128" height="64"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/wabt@1.0.20/index.js"></script>
+    <script>
+      'use strict';
+
+      const canvas = document.querySelector('canvas');
+      const context = canvas.getContext('2d');
+
+      Promise.all([
+        WabtModule(),
+        fetch('./index.wat')
+          .then((r) => r.text()),
+      ]).then(([wabt, wast]) => {
+        const { buffer } = wabt.parseWat('index.wat', wast).toBinary({});
+        const module = new WebAssembly.Module(buffer);
+
+        const input = new WebAssembly.Global({ value: 'i32', mutable: true }, 0);
+        const instance = new WebAssembly.Instance(module, {
+          env: {
+            input,
+            width: canvas.width,
+            height: canvas.height,
+            debug: console.log,
+          },
+        });
+
+        const ARROW_UP = 1 << 0;
+        const ARROW_DOWN = 1 << 1;
+
+        document.addEventListener('keydown', (event) => {
+          switch (event.code) {
+            case 'ArrowUp':
+              input.value |= ARROW_UP;
+              break;
+            case 'ArrowDown':
+              input.value |= ARROW_DOWN;
+              break;
+            default:
+              break;
+          }
+        });
+        document.addEventListener('keyup', (event) => {
+          switch (event.code) {
+            case 'ArrowUp':
+              input.value &= ~ARROW_UP;
+              break;
+            case 'ArrowDown':
+              input.value &= ~ARROW_DOWN;
+              break;
+            default:
+              break;
+          }
+        });
+
+        const canvasData = new Uint8ClampedArray(instance.exports.memory.buffer, 0, canvas.width * canvas.height * 4);
+        const imageData = new ImageData(canvasData, canvas.width, canvas.height);
+
+        (function update() {
+          requestAnimationFrame(update);
+          instance.exports.draw();
+          context.putImageData(imageData, 0, 0);
+        }());
+      });
+    </script>
+  </body>
+</html>
