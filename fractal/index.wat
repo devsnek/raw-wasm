@@ -3,7 +3,7 @@
   (global $height (import "env" "height") i32)
   (global $fwidth (import "env" "width") f64)
   (global $fheight (import "env" "height") f64)
-  (memory (export "memory") 1)
+  (memory (export "memory") 8)
   (global $time (mut f64) (f64.const 0))
 
   (func $write (param $x i32)

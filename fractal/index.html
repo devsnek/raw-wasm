@@ -31,6 +31,13 @@
       const canvas = document.querySelector('canvas');
       const context = canvas.getContext('2d');
 
+      const url = new URL(window.location);
+      if (url.searchParams.has('fullscreen')) {
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.width = window.innerWidth * (canvas.height / window.innerHeight);
+      }
+
       Promise.all([
         WabtModule(),
         fetch('./index.wat')
