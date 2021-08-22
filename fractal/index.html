@@ -35,10 +35,11 @@
       if (url.searchParams.has('fullscreen')) {
         canvas.style.width = '100%';
         canvas.style.height = '100%';
-        if (canvas.width > canvas.height)
+        if (canvas.width > canvas.height) {
           canvas.width = window.innerWidth * (canvas.height / window.innerHeight);
-        else
+        } else {
           canvas.height = window.innerHeight * (canvas.height / window.innerWidth);
+        }
       }
 
       Promise.all([
